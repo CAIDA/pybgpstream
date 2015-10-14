@@ -48,12 +48,12 @@ static char *module_docstring =
 #define PyMODINIT_FUNC void
 #endif
 PyMODINIT_FUNC
-init_pybgpstream(void)
+init_pybgpstream_caida(void)
 {
   PyObject *_pybgpstream;
   PyTypeObject *obj;
 
-  _pybgpstream = Py_InitModule3("_pybgpstream",
+  _pybgpstream = Py_InitModule3("_pybgpstream_caida",
                                 module_methods,
                                 module_docstring);
   if (_pybgpstream == NULL)
