@@ -6,4 +6,4 @@ Contents:
 .. toctree::
    :maxdepth: 1
 
-   api__pybgpstream
+   _pybgpstream
