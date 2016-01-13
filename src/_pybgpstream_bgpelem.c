@@ -54,6 +54,15 @@ get_aspath_pystr(bgpstream_as_path_t *aspath) {
 }
 
 static PyObject *
+get_communities_pystr(bgpstream_community_set_t *communities) {
+  // assuming 11 char per community, the this will hold >150 communities
+  char buf[2048] = "";
+  if(bgpstream_community_set_snprintf(buf, 2048, communities) >= 2048)
+    return NULL;
+  return PyString_FromString(buf);
+}
+
+static PyObject *
 get_peerstate_pystr(bgpstream_elem_peerstate_t state) {
   char buf[128] = "";
   if(bgpstream_elem_peerstate_snprintf(buf, 128, state) >= 128)
@@ -139,6 +148,9 @@ BGPElem_get_fields(BGPElemObject *self, void *closure)
 
       /* as path */
       ADD_TO_DICT("as-path", get_aspath_pystr(self->elem->aspath));
+
+      /* communities */
+      ADD_TO_DICT("communities", get_communities_pystr(self->elem->communities));
 
       /* FALLTHROUGH */
 
