@@ -1,7 +1,7 @@
 from setuptools import setup, Extension
 
 _pybgpstream_module = Extension("_pybgpstream_caida",
-                                libraries = ["bgpstream"],
+                                libraries = ["bgpstreamcaida"],
                                 sources = ["src/_pybgpstream_module.c",
                                            "src/_pybgpstream_bgpstream.c",
                                            "src/_pybgpstream_bgprecord.c",
