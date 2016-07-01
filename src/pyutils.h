@@ -2,8 +2,7 @@
 #define ___PYUTILS_H
 
 #ifndef PyVarObject_HEAD_INIT
-#define PyVarObject_HEAD_INIT(type, size) \
-	PyObject_HEAD_INIT(type) size,
+#define PyVarObject_HEAD_INIT(type, size) PyObject_HEAD_INIT(type) size,
 #endif
 
 #if PY_MAJOR_VERSION > 2
@@ -13,7 +12,7 @@
 #endif
 
 #ifndef Py_TYPE
-#define Py_TYPE(ob) (((PyObject*)(ob))->ob_type)
+#define Py_TYPE(ob) (((PyObject *)(ob))->ob_type)
 #endif
 
 #if PY_MAJOR_VERSION > 2
