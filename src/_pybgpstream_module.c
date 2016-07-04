@@ -21,13 +21,13 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <Python.h>
 #include "_pybgpstream_bgpelem.h"
 #include "_pybgpstream_bgprecord.h"
 #include "_pybgpstream_bgpstream.h"
+#include <Python.h>
 
 static PyMethodDef module_methods[] = {
-    {NULL} /* Sentinel */
+  {NULL} /* Sentinel */
 };
 
 #define ADD_OBJECT(objname)                                                    \
@@ -45,15 +45,15 @@ static PyMethodDef module_methods[] = {
 
 #if PY_MAJOR_VERSION > 2
 static struct PyModuleDef module_def = {
-    PyModuleDef_HEAD_INIT,
-    "_pybgpstream_caida",
-    MODULE_DOCSTRING,
-    -1,
-    module_methods,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
+  PyModuleDef_HEAD_INIT,
+  "_pybgpstream_caida",
+  MODULE_DOCSTRING,
+  -1,
+  module_methods,
+  NULL,
+  NULL,
+  NULL,
+  NULL,
 };
 #endif
 

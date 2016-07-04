@@ -20,16 +20,16 @@
  * You should have received a copy of the GNU General Public License along with
  * this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+#include "_pybgpstream_bgprecord.h"
 #include "pyutils.h"
 #include <Python.h>
 #include <bgpstream.h>
-#include "_pybgpstream_bgprecord.h"
 
 typedef struct {
   PyObject_HEAD
 
-      /* BGP Stream Instance Handle */
-      bgpstream_t *bs;
+    /* BGP Stream Instance Handle */
+    bgpstream_t *bs;
 } BGPStreamObject;
 
 #define BGPStreamDocstring "BGPStream object"
@@ -74,13 +74,13 @@ static PyObject *BGPStream_add_filter(BGPStreamObject *self, PyObject *args)
                                     "peer-asn", "prefix",    "community",
                                     NULL};
   static int filtertype_vals[] = {
-      BGPSTREAM_FILTER_TYPE_PROJECT,
-      BGPSTREAM_FILTER_TYPE_COLLECTOR,
-      BGPSTREAM_FILTER_TYPE_RECORD_TYPE,
-      BGPSTREAM_FILTER_TYPE_ELEM_PEER_ASN,
-      BGPSTREAM_FILTER_TYPE_ELEM_PREFIX,
-      BGPSTREAM_FILTER_TYPE_ELEM_COMMUNITY,
-      -1,
+    BGPSTREAM_FILTER_TYPE_PROJECT,
+    BGPSTREAM_FILTER_TYPE_COLLECTOR,
+    BGPSTREAM_FILTER_TYPE_RECORD_TYPE,
+    BGPSTREAM_FILTER_TYPE_ELEM_PEER_ASN,
+    BGPSTREAM_FILTER_TYPE_ELEM_PREFIX,
+    BGPSTREAM_FILTER_TYPE_ELEM_COMMUNITY,
+    -1,
   };
 
   const char *filter_type;
@@ -350,77 +350,76 @@ static PyObject *BGPStream_get_next_record(BGPStreamObject *self,
 }
 
 static PyMethodDef BGPStream_methods[] = {
-    {"add_filter", (PyCFunction)BGPStream_add_filter, METH_VARARGS,
-     "Add a filter to an un-started stream."},
+  {"add_filter", (PyCFunction)BGPStream_add_filter, METH_VARARGS,
+   "Add a filter to an un-started stream."},
 
-    {"add_rib_period_filter", (PyCFunction)BGPStream_add_rib_period_filter,
-     METH_VARARGS, "Set the RIB period filter for the current stream."},
+  {"add_rib_period_filter", (PyCFunction)BGPStream_add_rib_period_filter,
+   METH_VARARGS, "Set the RIB period filter for the current stream."},
 
-    {"add_interval_filter", (PyCFunction)BGPStream_add_interval_filter,
-     METH_VARARGS, "Add an interval filter to an un-started stream."},
-    {
-        "get_data_interfaces", (PyCFunction)BGPStream_get_data_interfaces,
-        METH_NOARGS, "Get a list of data interfaces available",
-    },
-    {"set_data_interface", (PyCFunction)BGPStream_set_data_interface,
-     METH_VARARGS, "Set the data interface used to discover dump files"},
-    {"get_data_interface_options",
-     (PyCFunction)BGPStream_get_data_interface_options, METH_VARARGS,
-     "Get a list of options available for the given data interface"},
-    {"set_data_interface_option",
-     (PyCFunction)BGPStream_set_data_interface_option, METH_VARARGS,
-     "Set a data interface option"},
-    {"set_live_mode", (PyCFunction)BGPStream_set_live_mode, METH_NOARGS,
-     "Enable live mode"},
+  {"add_interval_filter", (PyCFunction)BGPStream_add_interval_filter,
+   METH_VARARGS, "Add an interval filter to an un-started stream."},
+  {
+    "get_data_interfaces", (PyCFunction)BGPStream_get_data_interfaces,
+    METH_NOARGS, "Get a list of data interfaces available",
+  },
+  {"set_data_interface", (PyCFunction)BGPStream_set_data_interface,
+   METH_VARARGS, "Set the data interface used to discover dump files"},
+  {"get_data_interface_options",
+   (PyCFunction)BGPStream_get_data_interface_options, METH_VARARGS,
+   "Get a list of options available for the given data interface"},
+  {"set_data_interface_option",
+   (PyCFunction)BGPStream_set_data_interface_option, METH_VARARGS,
+   "Set a data interface option"},
+  {"set_live_mode", (PyCFunction)BGPStream_set_live_mode, METH_NOARGS,
+   "Enable live mode"},
 
-    {"start", (PyCFunction)BGPStream_start, METH_NOARGS,
-     "Start the BGPStream."},
+  {"start", (PyCFunction)BGPStream_start, METH_NOARGS, "Start the BGPStream."},
 
-    {"get_next_record", (PyCFunction)BGPStream_get_next_record, METH_VARARGS,
-     "Get the next BGPStreamRecord from the stream, or None if end-of-stream "
-     "has been reached"},
+  {"get_next_record", (PyCFunction)BGPStream_get_next_record, METH_VARARGS,
+   "Get the next BGPStreamRecord from the stream, or None if end-of-stream "
+   "has been reached"},
 
-    {NULL} /* Sentinel */
+  {NULL} /* Sentinel */
 };
 
 static PyTypeObject BGPStreamType = {
-    PyVarObject_HEAD_INIT(NULL, 0) "_pybgpstream.BGPStream", /* tp_name */
-    sizeof(BGPStreamObject),                                 /* tp_basicsize */
-    0,                                                       /* tp_itemsize */
-    (destructor)BGPStream_dealloc,                           /* tp_dealloc */
-    0,                                                       /* tp_print */
-    0,                                                       /* tp_getattr */
-    0,                                                       /* tp_setattr */
-    0,                                                       /* tp_compare */
-    0,                                                       /* tp_repr */
-    0,                                                       /* tp_as_number */
-    0,                                        /* tp_as_sequence */
-    0,                                        /* tp_as_mapping */
-    0,                                        /* tp_hash */
-    0,                                        /* tp_call */
-    0,                                        /* tp_str */
-    0,                                        /* tp_getattro */
-    0,                                        /* tp_setattro */
-    0,                                        /* tp_as_buffer */
-    Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE, /* tp_flags */
-    BGPStreamDocstring,                       /* tp_doc */
-    0,                                        /* tp_traverse */
-    0,                                        /* tp_clear */
-    0,                                        /* tp_richcompare */
-    0,                                        /* tp_weaklistoffset */
-    0,                                        /* tp_iter */
-    0,                                        /* tp_iternext */
-    BGPStream_methods,                        /* tp_methods */
-    0,                                        /* tp_members */
-    0,                                        /* tp_getset */
-    0,                                        /* tp_base */
-    0,                                        /* tp_dict */
-    0,                                        /* tp_descr_get */
-    0,                                        /* tp_descr_set */
-    0,                                        /* tp_dictoffset */
-    (initproc)BGPStream_init,                 /* tp_init */
-    0,                                        /* tp_alloc */
-    BGPStream_new,                            /* tp_new */
+  PyVarObject_HEAD_INIT(NULL, 0) "_pybgpstream.BGPStream", /* tp_name */
+  sizeof(BGPStreamObject),                                 /* tp_basicsize */
+  0,                                                       /* tp_itemsize */
+  (destructor)BGPStream_dealloc,                           /* tp_dealloc */
+  0,                                                       /* tp_print */
+  0,                                                       /* tp_getattr */
+  0,                                                       /* tp_setattr */
+  0,                                                       /* tp_compare */
+  0,                                                       /* tp_repr */
+  0,                                                       /* tp_as_number */
+  0,                                                       /* tp_as_sequence */
+  0,                                                       /* tp_as_mapping */
+  0,                                                       /* tp_hash */
+  0,                                                       /* tp_call */
+  0,                                                       /* tp_str */
+  0,                                                       /* tp_getattro */
+  0,                                                       /* tp_setattro */
+  0,                                                       /* tp_as_buffer */
+  Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE,                /* tp_flags */
+  BGPStreamDocstring,                                      /* tp_doc */
+  0,                                                       /* tp_traverse */
+  0,                                                       /* tp_clear */
+  0,                                                       /* tp_richcompare */
+  0,                        /* tp_weaklistoffset */
+  0,                        /* tp_iter */
+  0,                        /* tp_iternext */
+  BGPStream_methods,        /* tp_methods */
+  0,                        /* tp_members */
+  0,                        /* tp_getset */
+  0,                        /* tp_base */
+  0,                        /* tp_dict */
+  0,                        /* tp_descr_get */
+  0,                        /* tp_descr_set */
+  0,                        /* tp_dictoffset */
+  (initproc)BGPStream_init, /* tp_init */
+  0,                        /* tp_alloc */
+  BGPStream_new,            /* tp_new */
 };
 
 PyTypeObject *_pybgpstream_bgpstream_get_BGPStreamType()
