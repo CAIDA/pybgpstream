@@ -30,8 +30,8 @@
 typedef struct {
   PyObject_HEAD
 
-      /* BGP Stream Record instance Handle */
-      bgpstream_record_t *rec;
+    /* BGP Stream Record instance Handle */
+    bgpstream_record_t *rec;
 
 } BGPRecordObject;
 
