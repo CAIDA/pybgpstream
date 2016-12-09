@@ -28,16 +28,6 @@
 
 #define BGPElemDocstring "BGPElem object"
 
-#define ADD_STR_TO_DICT(key_str, value_exp)                                    \
-  do {                                                                         \
-    PyObject *key = PYSTR_FROMSTR(key_str);                                    \
-    PyObject *value = (value_exp);                                             \
-    if (PyDict_SetItem(dict, key, value) == -1)                                \
-      return NULL;                                                             \
-    Py_DECREF(key);                                                            \
-    Py_DECREF(value);                                                          \
-  } while (0)
-
 static PyObject *get_ip_pystr(bgpstream_ip_addr_t *ip)
 {
   char ip_str[INET6_ADDRSTRLEN] = "";
@@ -78,12 +68,14 @@ static PyObject *get_communities_pylist(bgpstream_community_set_t *communities)
   for (i = 0; i < len; i++) {
     c = bgpstream_community_set_get(communities, i);
 
-    /* create the dictionary */
-    if ((dict = PyDict_New()) == NULL)
-      return NULL;
-    /* add pair to dictionary */
-    ADD_STR_TO_DICT("asn", Py_BuildValue("k", c->asn));
-    ADD_STR_TO_DICT("value", Py_BuildValue("k", c->value));
+      /* create the dictionary */
+      if((dict = PyDict_New()) == NULL)
+        return NULL;
+      /* add pair to dictionary */
+      if (add_to_dict(dict, "asn", Py_BuildValue("k", c->asn)) ||
+          add_to_dict(dict, "value", Py_BuildValue("k", c->value))) {
+        return NULL;
+      }
 
     /* add dictionary to list*/
     PyList_SetItem(list, (Py_ssize_t)i, dict);
@@ -151,31 +143,31 @@ static PyObject *BGPElem_get_fields(BGPElemObject *self, void *closure)
   switch (self->elem->type) {
   case BGPSTREAM_ELEM_TYPE_RIB:
   case BGPSTREAM_ELEM_TYPE_ANNOUNCEMENT:
-    /* next hop */
-    ADD_STR_TO_DICT("next-hop",
-                    get_ip_pystr((bgpstream_ip_addr_t *)&self->elem->nexthop));
-
-    /* as path */
-    ADD_STR_TO_DICT("as-path", get_aspath_pystr(self->elem->aspath));
-
-    /* communities */
-    ADD_STR_TO_DICT("communities",
-                    get_communities_pylist(self->elem->communities));
+    if (add_to_dict(
+          dict, "next-hop",
+          get_ip_pystr((bgpstream_ip_addr_t *)&self->elem->nexthop)) ||
+        add_to_dict(dict, "as-path", get_aspath_pystr(self->elem->aspath)) ||
+        add_to_dict(dict, "communities",
+                    get_communities_pylist(self->elem->communities))) {
+      return NULL;
+    }
 
   /* FALLTHROUGH */
 
   case BGPSTREAM_ELEM_TYPE_WITHDRAWAL:
-    /* prefix */
-    ADD_STR_TO_DICT("prefix",
-                    get_pfx_pystr((bgpstream_pfx_t *)&self->elem->prefix));
+    if (add_to_dict(dict, "prefix",
+                    get_pfx_pystr((bgpstream_pfx_t *)&self->elem->prefix))) {
+      return NULL;
+    }
     break;
 
   case BGPSTREAM_ELEM_TYPE_PEERSTATE:
-    /* old state */
-    ADD_STR_TO_DICT("old-state", get_peerstate_pystr(self->elem->old_state));
-
-    /* new state */
-    ADD_STR_TO_DICT("new-state", get_peerstate_pystr(self->elem->new_state));
+    if (add_to_dict(dict, "old-state",
+                    get_peerstate_pystr(self->elem->old_state)) ||
+        add_to_dict(dict, "new-state",
+                    get_peerstate_pystr(self->elem->new_state))) {
+      return NULL;
+    }
     break;
 
   case BGPSTREAM_ELEM_TYPE_UNKNOWN:
