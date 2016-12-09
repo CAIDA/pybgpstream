@@ -139,16 +139,6 @@ static PyObject *BGPStream_add_interval_filter(BGPStreamObject *self,
   Py_RETURN_NONE;
 }
 
-#define ADD_TO_DICT(key_str, value_exp)                                        \
-  do {                                                                         \
-    PyObject *key = PYSTR_FROMSTR(key_str);                                    \
-    PyObject *value = (value_exp);                                             \
-    if (PyDict_SetItem(dict, key, value) == -1)                                \
-      return NULL;                                                             \
-    Py_DECREF(key);                                                            \
-    Py_DECREF(value);                                                          \
-  } while (0)
-
 /** Get information about available data interfaces */
 static PyObject *BGPStream_get_data_interfaces(BGPStreamObject *self)
 {
@@ -177,20 +167,12 @@ static PyObject *BGPStream_get_data_interfaces(BGPStreamObject *self)
       continue;
     }
 
-/* add info to dict */
-
-/* id */
-#if PY_MAJOR_VERSION > 2
-    ADD_TO_DICT("id", PyLong_FromLong(ids[i]));
-#else
-    ADD_TO_DICT("id", PyInt_FromLong(ids[i]));
-#endif
-
-    /* name */
-    ADD_TO_DICT("name", PYSTR_FROMSTR(info->name));
-
-    /* description */
-    ADD_TO_DICT("description", PYSTR_FROMSTR(info->description));
+    /* add info to dict */
+    if (add_to_dict(dict, "id", PYNUM_FROMLONG(ids[i])) ||
+        add_to_dict(dict, "name", PYSTR_FROMSTR(info->name)) ||
+        add_to_dict(dict, "description", PYSTR_FROMSTR(info->description))) {
+        return NULL;
+    }
 
     /* add dict to list */
     if (PyList_Append(list, dict) == -1)
@@ -250,11 +232,10 @@ static PyObject *BGPStream_get_data_interface_options(BGPStreamObject *self,
     if ((dict = PyDict_New()) == NULL)
       return NULL;
 
-    /* name */
-    ADD_TO_DICT("name", PYSTR_FROMSTR(options[i].name));
-
-    /* description */
-    ADD_TO_DICT("description", PYSTR_FROMSTR(options[i].description));
+    if (add_to_dict(dict, "name", PYSTR_FROMSTR(options[i].name)) || 
+        add_to_dict(dict, "description", PYSTR_FROMSTR(options[i].description))) {
+        return NULL;
+    }
 
     /* add dict to list */
     if (PyList_Append(list, dict) == -1)
