@@ -68,14 +68,14 @@ static PyObject *get_communities_pylist(bgpstream_community_set_t *communities)
   for (i = 0; i < len; i++) {
     c = bgpstream_community_set_get(communities, i);
 
-      /* create the dictionary */
-      if((dict = PyDict_New()) == NULL)
-        return NULL;
-      /* add pair to dictionary */
-      if (add_to_dict(dict, "asn", Py_BuildValue("k", c->asn)) ||
-          add_to_dict(dict, "value", Py_BuildValue("k", c->value))) {
-        return NULL;
-      }
+    /* create the dictionary */
+    if ((dict = PyDict_New()) == NULL)
+      return NULL;
+    /* add pair to dictionary */
+    if (add_to_dict(dict, "asn", Py_BuildValue("k", c->asn)) ||
+        add_to_dict(dict, "value", Py_BuildValue("k", c->value))) {
+      return NULL;
+    }
 
     /* add dictionary to list*/
     PyList_SetItem(list, (Py_ssize_t)i, dict);
