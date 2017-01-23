@@ -209,7 +209,7 @@ static PyObject *BGPStream_get_data_interfaces(BGPStreamObject *self)
     if (add_to_dict(dict, "id", PYNUM_FROMLONG(ids[i])) ||
         add_to_dict(dict, "name", PYSTR_FROMSTR(info->name)) ||
         add_to_dict(dict, "description", PYSTR_FROMSTR(info->description))) {
-        return NULL;
+      return NULL;
     }
 
     /* add dict to list */
@@ -270,9 +270,10 @@ static PyObject *BGPStream_get_data_interface_options(BGPStreamObject *self,
     if ((dict = PyDict_New()) == NULL)
       return NULL;
 
-    if (add_to_dict(dict, "name", PYSTR_FROMSTR(options[i].name)) || 
-        add_to_dict(dict, "description", PYSTR_FROMSTR(options[i].description))) {
-        return NULL;
+    if (add_to_dict(dict, "name", PYSTR_FROMSTR(options[i].name)) ||
+        add_to_dict(dict, "description",
+                    PYSTR_FROMSTR(options[i].description))) {
+      return NULL;
     }
 
     /* add dict to list */
