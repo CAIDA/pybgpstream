@@ -37,7 +37,6 @@ typedef struct {
 static void BGPStream_dealloc(BGPStreamObject *self)
 {
   if (self->bs != NULL) {
-    bgpstream_stop(self->bs);
     bgpstream_destroy(self->bs);
   }
   Py_TYPE(self)->tp_free((PyObject *)self);
@@ -338,35 +337,29 @@ static PyObject *BGPStream_start(BGPStreamObject *self)
 }
 
 /** Corresponds to bgpstream_get_next_record */
-static PyObject *BGPStream_get_next_record(BGPStreamObject *self,
-                                           PyObject *args)
+static PyObject *BGPStream_get_next_record(BGPStreamObject *self)
 {
-  BGPRecordObject *pyrec = NULL;
+  bgpstream_record_t *rec = NULL;
   int ret;
+  PyObject *pyrec;
 
-  /* get the BGPRecord argument */
-  if (!PyArg_ParseTuple(args, "O!", _pybgpstream_bgpstream_get_BGPRecordType(),
-                        &pyrec)) {
-    return NULL;
-  }
-
-  if (!pyrec->rec) {
-    PyErr_SetString(PyExc_RuntimeError, "Invalid BGPRecord object");
-    return NULL;
-  }
-
-  ret = bgpstream_get_next_record(self->bs, pyrec->rec);
-
+  ret = bgpstream_get_next_record(self->bs, &rec);
   if (ret < 0) {
     PyErr_SetString(PyExc_RuntimeError,
                     "Could not get next record (is the stream started?)");
     return NULL;
   } else if (ret == 0) {
     /* end of stream */
-    Py_RETURN_FALSE;
+    Py_RETURN_NONE;
+  }
+  // else, valid record
+
+  if ((pyrec = BGPRecord_new(rec)) == NULL) {
+    PyErr_SetString(PyExc_RuntimeError, "Could not create BGPRecord object");
+    return NULL;
   }
 
-  Py_RETURN_TRUE;
+  return pyrec;
 }
 
 static PyMethodDef BGPStream_methods[] = {

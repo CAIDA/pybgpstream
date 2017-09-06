@@ -93,7 +93,6 @@ static PyObject *get_peerstate_pystr(bgpstream_elem_peerstate_t state)
 
 static void BGPElem_dealloc(BGPElemObject *self)
 {
-  bgpstream_elem_destroy(self->elem);
   Py_TYPE(self)->tp_free((PyObject *)self);
 }
 
@@ -258,14 +257,7 @@ PyObject *BGPElem_new(bgpstream_elem_t *elem)
     return NULL;
   }
 
-  if ((self->elem = bgpstream_elem_create()) == NULL) {
-    return NULL;
-  }
-
-  if (bgpstream_elem_copy(self->elem, elem) == NULL) {
-    Py_DECREF(self);
-    return NULL;
-  }
+  self->elem = elem;
 
   return (PyObject *)self;
 }

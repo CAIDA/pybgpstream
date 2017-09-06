@@ -30,12 +30,15 @@
 typedef struct {
   PyObject_HEAD
 
-    /* BGP Stream Record instance Handle */
+    /* BGP Stream Record instance Handle (borrowed pointer) */
     bgpstream_record_t *rec;
 
 } BGPRecordObject;
 
 /** Expose the BGPRecordType structure */
 PyTypeObject *_pybgpstream_bgpstream_get_BGPRecordType(void);
+
+/** Expose our new function as it is not exposed to Python */
+PyObject *BGPRecord_new(bgpstream_record_t *rec);
 
 #endif /* ___PYBGPSTREAM_BGPRECORD_H */
