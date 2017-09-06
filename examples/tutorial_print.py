@@ -22,13 +22,10 @@
 # this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-from _pybgpstream import BGPStream, BGPRecord, BGPElem
+import _pybgpstream_caida as _pybgpstream
 
 # create a new bgpstream instance
-stream = BGPStream()
-
-# create a reusable bgprecord instance
-rec = BGPRecord()
+stream = _pybgpstream.BGPStream()
 
 # configure the stream to retrieve Updates records from the RRC06 collector
 # The commented out add_filter lines are the old way, the parse_filter_string
@@ -46,11 +43,13 @@ stream.add_interval_filter(1427846570, 1427846670)
 stream.start()
 
 # print the stream
-while(stream.get_next_record(rec)):
+rec = stream.get_next_record()
+while(rec):
     print rec.status, rec.project +"."+ rec.collector, rec.time
     elem = rec.get_next_elem()
     while(elem):
         print "\t", elem.type, elem.peer_address, elem.peer_asn, \
             elem.type, elem.fields
         elem = rec.get_next_elem()
+    rec = stream.get_next_record()
 

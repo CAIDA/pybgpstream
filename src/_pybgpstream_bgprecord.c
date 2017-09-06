@@ -31,28 +31,7 @@
 
 static void BGPRecord_dealloc(BGPRecordObject *self)
 {
-  if (self->rec != NULL) {
-    bgpstream_record_destroy(self->rec);
-  }
   Py_TYPE(self)->tp_free((PyObject *)self);
-}
-
-static PyObject *BGPRecord_new(PyTypeObject *type, PyObject *args,
-                               PyObject *kwds)
-{
-  BGPRecordObject *self;
-
-  self = (BGPRecordObject *)type->tp_alloc(type, 0);
-  if (self == NULL) {
-    return NULL;
-  }
-
-  if ((self->rec = bgpstream_record_create()) == NULL) {
-    Py_DECREF(self);
-    return NULL;
-  }
-
-  return (PyObject *)self;
 }
 
 static int BGPRecord_init(BGPRecordObject *self, PyObject *args, PyObject *kwds)
@@ -164,11 +143,19 @@ static PyObject *BGPRecord_get_dump_position(BGPRecordObject *self,
 static PyObject *BGPRecord_get_next_elem(BGPRecordObject *self)
 {
   bgpstream_elem_t *elem;
+  int ret;
 
   PyObject *pyelem;
 
-  if ((elem = bgpstream_record_get_next_elem(self->rec)) == NULL)
+  ret = bgpstream_record_get_next_elem(self->rec, &elem);
+  if (ret < 0) {
+    PyErr_SetString(PyExc_RuntimeError,
+                    "Could not get next record (is the stream started?)");
+    return NULL;
+  } else if (ret == 0) {
+    /* end of elems */
     Py_RETURN_NONE;
+  }
 
   if ((pyelem = BGPElem_new(elem)) == NULL) {
     PyErr_SetString(PyExc_RuntimeError, "Could not create BGPElem object");
@@ -250,10 +237,25 @@ static PyTypeObject BGPRecordType = {
   0,                        /* tp_dictoffset */
   (initproc)BGPRecord_init, /* tp_init */
   0,                        /* tp_alloc */
-  BGPRecord_new,            /* tp_new */
+  0,            /* tp_new */
 };
 
 PyTypeObject *_pybgpstream_bgpstream_get_BGPRecordType()
 {
   return &BGPRecordType;
+}
+
+/* only available to c code */
+PyObject *BGPRecord_new(bgpstream_record_t *rec)
+{
+  BGPRecordObject *self;
+
+  self = (BGPRecordObject *)(BGPRecordType.tp_alloc(&BGPRecordType, 0));
+  if (self == NULL) {
+    return NULL;
+  }
+
+  self->rec = rec;
+
+  return (PyObject *)self;
 }
