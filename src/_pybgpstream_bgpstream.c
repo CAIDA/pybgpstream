@@ -21,6 +21,7 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "_pybgpstream_bgprecord.h"
+#include "_pybgpstream_bgpstream.h"
 #include "pyutils.h"
 #include <Python.h>
 #include <bgpstream.h>
