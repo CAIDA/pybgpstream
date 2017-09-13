@@ -58,4 +58,11 @@ static inline int add_to_dict(PyObject *dict, const char *key_str,
   return err;
 }
 
+static inline PyObject *get_ip_pystr(bgpstream_ip_addr_t *ip)
+{
+  char ip_str[INET6_ADDRSTRLEN] = "";
+  bgpstream_addr_ntop(ip_str, INET6_ADDRSTRLEN, ip);
+  return PYSTR_FROMSTR(ip_str);
+}
+
 #endif

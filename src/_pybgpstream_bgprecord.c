@@ -53,6 +53,17 @@ static PyObject *BGPRecord_get_collector(BGPRecordObject *self, void *closure)
   return Py_BuildValue("s", self->rec->attributes.dump_collector);
 }
 
+/* router_ip */
+static PyObject *BGPRecord_get_router_ip(BGPRecordObject *self, void *closure)
+{
+  // if router IP is not set, then return None
+  if (self->rec->attributes.router_ip.version == 0) {
+    Py_RETURN_NONE;
+  }
+  // else, assume valid version, and return a string
+  return get_ip_pystr((bgpstream_ip_addr_t *)&self->rec->attributes.router_ip);
+}
+
 /* type */
 static PyObject *BGPRecord_get_type(BGPRecordObject *self, void *closure)
 {
@@ -180,6 +191,9 @@ static PyGetSetDef BGPRecord_getsetters[] = {
 
   /* attributes.dump_collector */
   {"collector", (getter)BGPRecord_get_collector, NULL, "Dump Collector", NULL},
+
+  /* attributes.router_ip */
+  {"router_ip", (getter)BGPRecord_get_router_ip, NULL, "Router IP Address", NULL},
 
   /* attributes.dump_type */
   {"type", (getter)BGPRecord_get_type, NULL, "Dump Type", NULL},

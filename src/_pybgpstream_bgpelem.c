@@ -28,13 +28,6 @@
 
 #define BGPElemDocstring "BGPElem object"
 
-static PyObject *get_ip_pystr(bgpstream_ip_addr_t *ip)
-{
-  char ip_str[INET6_ADDRSTRLEN] = "";
-  bgpstream_addr_ntop(ip_str, INET6_ADDRSTRLEN, ip);
-  return PYSTR_FROMSTR(ip_str);
-}
-
 static PyObject *get_pfx_pystr(bgpstream_pfx_t *pfx)
 {
   char pfx_str[INET6_ADDRSTRLEN + 3] = "";
