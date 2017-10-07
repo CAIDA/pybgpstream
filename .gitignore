@@ -1,5 +1,33 @@
+# temp files
+*~
+*.#*
+.DS_Store
+
+# IDE crap
+.idea/
+
+# Compiled Object files
+*.slo
+*.lo
+*.o
+
+# Compiled Dynamic libraries
+*.so
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+*.pyc
+# helpful to me only?
+TAGS
+
+# Compiled programs
+*.tar.gz
+
+# pybgpstream build files
 MANIFEST
 build/
 dist/
 docs/_build
-pybgpstream.egg-info/
+*.egg-info/
