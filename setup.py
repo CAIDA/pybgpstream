@@ -1,13 +1,13 @@
 from setuptools import setup, Extension
 
-_pybgpstream_module = Extension("_pybgpstream_caida",
-                                libraries = ["bgpstreamcaida"],
+_pybgpstream_module = Extension("_pybgpstream",
+                                libraries = ["bgpstream"],
                                 sources = ["src/_pybgpstream_module.c",
                                            "src/_pybgpstream_bgpstream.c",
                                            "src/_pybgpstream_bgprecord.c",
                                            "src/_pybgpstream_bgpelem.c"])
 
-setup(name = "pybgpstream_caida",
+setup(name = "pybgpstream",
       description = "A Python interface to BGPStream",
       long_description = "Provides a high-level interface for live and historical BGP data analysis. PyBGPStream requires the libBGPStream C library, available at http://bgpstream.caida.org/download.",
       version = "2.0.0",
