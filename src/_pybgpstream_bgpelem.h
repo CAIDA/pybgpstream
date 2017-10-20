@@ -30,7 +30,10 @@
 typedef struct {
   PyObject_HEAD
 
-    bgpstream_elem_t *elem;
+  bgpstream_elem_t *elem;
+
+  /** Cached dictionary of elem fields */
+  PyObject *fields;
 
 } BGPElemObject;
 

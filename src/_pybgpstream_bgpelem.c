@@ -85,6 +85,8 @@ static PyObject *get_peerstate_pystr(bgpstream_elem_peerstate_t state)
 
 static void BGPElem_dealloc(BGPElemObject *self)
 {
+  Py_XDECREF(self->fields);
+
   Py_TYPE(self)->tp_free((PyObject *)self);
 }
 
@@ -119,10 +121,16 @@ static PyObject *BGPElem_get_peer_asn(BGPElemObject *self, void *closure)
 /** Type-dependent field dict */
 static PyObject *BGPElem_get_fields(BGPElemObject *self, void *closure)
 {
-  PyObject *dict;
+  PyObject *dict = self->fields;
 
-  /* create the dictionary */
-  if ((dict = PyDict_New()) == NULL)
+  // check if we already built the dict before
+  if (dict != NULL) {
+    // "O" will increase refcount
+    return Py_BuildValue("O", dict);
+  }
+
+  // need to create the dictionary
+  if ((self->fields = dict = PyDict_New()) == NULL)
     return NULL;
 
   switch (self->elem->type) {
@@ -160,7 +168,7 @@ static PyObject *BGPElem_get_fields(BGPElemObject *self, void *closure)
     break;
   }
 
-  return Py_BuildValue("N", dict);
+  return Py_BuildValue("O", dict);
 }
 
 static PyMethodDef BGPElem_methods[] = {
