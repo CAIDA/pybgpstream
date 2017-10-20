@@ -46,7 +46,7 @@ static PyMethodDef module_methods[] = {
 #if PY_MAJOR_VERSION > 2
 static struct PyModuleDef module_def = {
   PyModuleDef_HEAD_INIT,
-  "_pybgpstream_caida",
+  "_pybgpstream",
   MODULE_DOCSTRING,
   -1,
   module_methods,
@@ -69,7 +69,7 @@ static PyObject *moduleinit(void)
 #if PY_MAJOR_VERSION > 2
   m = PyModule_Create(&module_def);
 #else
-  m = Py_InitModule3("_pybgpstream_caida", module_methods, MODULE_DOCSTRING);
+  m = Py_InitModule3("_pybgpstream", module_methods, MODULE_DOCSTRING);
 #endif
 
   if (m == NULL)
@@ -88,12 +88,12 @@ static PyObject *moduleinit(void)
 }
 
 #if PY_MAJOR_VERSION > 2
-PyMODINIT_FUNC PyInit__pybgpstream_caida(void)
+PyMODINIT_FUNC PyInit__pybgpstream(void)
 {
   return moduleinit();
 }
 #else
-PyMODINIT_FUNC init_pybgpstream_caida(void)
+PyMODINIT_FUNC init_pybgpstream(void)
 {
   moduleinit();
 }
