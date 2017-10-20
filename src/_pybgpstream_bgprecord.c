@@ -41,33 +41,47 @@ static int BGPRecord_init(BGPRecordObject *self, PyObject *args, PyObject *kwds)
 
 /* attributes */
 
+#define RETURN_PYSTR_OR_NONE(cstr)                                             \
+  do {                                                                         \
+    if (strlen(cstr) == 0) {                                                   \
+      Py_RETURN_NONE;                                                          \
+    }                                                                          \
+    return Py_BuildValue("s", cstr);                                           \
+  } while (0)
+
 /* project */
 static PyObject *BGPRecord_get_project(BGPRecordObject *self, void *closure)
 {
-  return Py_BuildValue("s", self->rec->attributes.dump_project);
+  RETURN_PYSTR_OR_NONE(self->rec->project_name);
 }
 
 /* collector */
 static PyObject *BGPRecord_get_collector(BGPRecordObject *self, void *closure)
 {
-  return Py_BuildValue("s", self->rec->attributes.dump_collector);
+  RETURN_PYSTR_OR_NONE(self->rec->collector_name);
+}
+
+/* router */
+static PyObject *BGPRecord_get_router(BGPRecordObject *self, void *closure)
+{
+  RETURN_PYSTR_OR_NONE(self->rec->router_name);
 }
 
 /* router_ip */
 static PyObject *BGPRecord_get_router_ip(BGPRecordObject *self, void *closure)
 {
   // if router IP is not set, then return None
-  if (self->rec->attributes.router_ip.version == 0) {
+  if (self->rec->router_ip.version == 0) {
     Py_RETURN_NONE;
   }
   // else, assume valid version, and return a string
-  return get_ip_pystr((bgpstream_ip_addr_t *)&self->rec->attributes.router_ip);
+  return get_ip_pystr((bgpstream_ip_addr_t *)&self->rec->router_ip);
 }
 
 /* type */
 static PyObject *BGPRecord_get_type(BGPRecordObject *self, void *closure)
 {
-  switch (self->rec->attributes.dump_type) {
+  switch (self->rec->type) {
   case BGPSTREAM_UPDATE:
     return Py_BuildValue("s", "update");
     break;
@@ -86,13 +100,14 @@ static PyObject *BGPRecord_get_type(BGPRecordObject *self, void *closure)
 /* dump_time */
 static PyObject *BGPRecord_get_dump_time(BGPRecordObject *self, void *closure)
 {
-  return Py_BuildValue("l", self->rec->attributes.dump_time);
+  return Py_BuildValue("k", self->rec->dump_time_sec);
 }
 
-/* record_time */
-static PyObject *BGPRecord_get_record_time(BGPRecordObject *self, void *closure)
+/* time (sec.usec) */
+static PyObject *BGPRecord_get_time(BGPRecordObject *self, void *closure)
 {
-  return Py_BuildValue("l", self->rec->attributes.record_time);
+  return Py_BuildValue("", self->rec->time_sec +
+                               (self->rec->time_usec / 1000000.0));
 }
 
 /* get status */
@@ -186,28 +201,22 @@ static PyMethodDef BGPRecord_methods[] = {
 
 static PyGetSetDef BGPRecord_getsetters[] = {
 
-  /* attributes.dump_project */
-  {"project", (getter)BGPRecord_get_project, NULL, "Dump Project", NULL},
+  {"project", (getter)BGPRecord_get_project, NULL, "Project Name", NULL},
 
-  /* attributes.dump_collector */
-  {"collector", (getter)BGPRecord_get_collector, NULL, "Dump Collector", NULL},
+  {"collector", (getter)BGPRecord_get_collector, NULL, "Collector Name", NULL},
 
-  /* attributes.router_ip */
+  {"router", (getter)BGPRecord_get_router, NULL, "Router Name", NULL},
+
   {"router_ip", (getter)BGPRecord_get_router_ip, NULL, "Router IP Address", NULL},
 
-  /* attributes.dump_type */
-  {"type", (getter)BGPRecord_get_type, NULL, "Dump Type", NULL},
+  {"type", (getter)BGPRecord_get_type, NULL, "Type", NULL},
 
-  /* attributes.dump_time */
   {"dump_time", (getter)BGPRecord_get_dump_time, NULL, "Dump Time", NULL},
 
-  /* attributes.record_time */
-  {"time", (getter)BGPRecord_get_record_time, NULL, "Record Time", NULL},
+  {"time", (getter)BGPRecord_get_time, NULL, "Record Time", NULL},
 
-  /* status */
   {"status", (getter)BGPRecord_get_status, NULL, "Status", NULL},
 
-  /* attributes.dump_position */
   {"dump_position", (getter)BGPRecord_get_dump_position, NULL, "Dump Position",
    NULL},
 

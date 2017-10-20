@@ -47,7 +47,6 @@ static PyObject *get_aspath_pystr(bgpstream_as_path_t *aspath)
 
 static PyObject *get_communities_pylist(bgpstream_community_set_t *communities)
 {
-
   PyObject *list;
   bgpstream_community_t *c;
   Py_ssize_t len = bgpstream_community_set_size(communities);
@@ -103,24 +102,18 @@ static PyObject *BGPElem_get_type(BGPElemObject *self, void *closure)
   return PYSTR_FROMSTR(buf);
 }
 
-/* timestamp */
-static PyObject *BGPElem_get_time(BGPElemObject *self, void *closure)
-{
-  return Py_BuildValue("k", self->elem->timestamp);
-}
-
 /* peer address */
 /** @todo consider using something like netaddr
     (http://pythonhosted.org/netaddr/) */
 static PyObject *BGPElem_get_peer_address(BGPElemObject *self, void *closure)
 {
-  return get_ip_pystr((bgpstream_ip_addr_t *)&self->elem->peer_address);
+  return get_ip_pystr((bgpstream_ip_addr_t *)&self->elem->peer_ip);
 }
 
 /* peer as number */
 static PyObject *BGPElem_get_peer_asn(BGPElemObject *self, void *closure)
 {
-  return Py_BuildValue("k", self->elem->peer_asnumber);
+  return Py_BuildValue("k", self->elem->peer_asn);
 }
 
 /** Type-dependent field dict */
@@ -138,7 +131,7 @@ static PyObject *BGPElem_get_fields(BGPElemObject *self, void *closure)
     if (add_to_dict(
           dict, "next-hop",
           get_ip_pystr((bgpstream_ip_addr_t *)&self->elem->nexthop)) ||
-        add_to_dict(dict, "as-path", get_aspath_pystr(self->elem->aspath)) ||
+        add_to_dict(dict, "as-path", get_aspath_pystr(self->elem->as_path)) ||
         add_to_dict(dict, "communities",
                     get_communities_pylist(self->elem->communities))) {
       return NULL;
@@ -178,9 +171,6 @@ static PyGetSetDef BGPElem_getsetters[] = {
 
   /* type */
   {"type", (getter)BGPElem_get_type, NULL, "Type", NULL},
-
-  /* timestamp */
-  {"time", (getter)BGPElem_get_time, NULL, "Time", NULL},
 
   /* Peer Address */
   {"peer_address", (getter)BGPElem_get_peer_address, NULL, "Peer IP Address",
