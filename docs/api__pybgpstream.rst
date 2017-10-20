@@ -236,24 +236,27 @@ BGPRecord
 
    .. py:attribute:: project
 
-      The name of the project that created the record. *(basestring, readonly)*
+      The name of the project that created the record, or `None` if
+      unset. *(basestring, readonly)*
 
 
    .. py:attribute:: collector
 
-      The name of the collector that created the record. *(basestring, readonly)*
+      The name of the collector that created the record, or `None` if
+      unset. *(basestring, readonly)*
+
+
+   .. py:attribute:: router
+
+      The name of the router that created the record, or `None` if unset. (Only
+      used when accessing data from an OpenBMP kafka stream.) *(basestring,
+      readonly)*
 
 
    .. py:attribute:: type
 
       The type of the record, can be one of 'update', 'rib', or 'unknown'.
       *(basestring, readonly)*
-
-
-   .. py:attribute:: dump_time
-
-      The time associated with the dump that contained the record (e.g. the
-      beginning of the MRT file that the record was found in.) *(int, readonly)*
 
 
    .. py:attribute:: time
@@ -266,6 +269,12 @@ BGPRecord
 
       The status of the record, can be one of 'valid', 'filtered-source',
       'empty-source', 'corrupted-source', 'unknown'. *(basestring, readonly)*
+
+
+   .. py:attribute:: dump_time
+
+      The time associated with the dump that contained the record (e.g. the
+      beginning of the MRT file that the record was found in.) *(int, readonly)*
 
 
    .. py:attribute:: dump_position
@@ -294,6 +303,10 @@ BGPElem
    The BGP Elem class represents a single element obtained from a BGP Record
    instance using the :py:meth:`BGPRecord.get_next_elem` method.
 
+   In version 2, a BGPElem object no longer contains a `time` field. This
+   information was duplicated from the record and is now to be accessed from
+   there instead.
+
    All attributes are read-only.
 
 
@@ -301,11 +314,6 @@ BGPElem
 
       The type of the element, can be one of 'rib', 'announcement',
       'withdrawal', 'peerstate', 'unknown'. *(basestring, readonly)*
-
-
-   .. py:attribute:: time
-
-      The time that the element represents. *(int, readonly)*
 
 
    .. py:attribute:: peer_address
