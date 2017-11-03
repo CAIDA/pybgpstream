@@ -106,7 +106,7 @@ static PyObject *BGPRecord_get_dump_time(BGPRecordObject *self, void *closure)
 /* time (sec.usec) */
 static PyObject *BGPRecord_get_time(BGPRecordObject *self, void *closure)
 {
-  return Py_BuildValue("", self->rec->time_sec +
+  return Py_BuildValue("d", self->rec->time_sec +
                                (self->rec->time_usec / 1000000.0));
 }
 
