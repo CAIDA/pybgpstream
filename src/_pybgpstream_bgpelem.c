@@ -45,34 +45,29 @@ static PyObject *get_aspath_pystr(bgpstream_as_path_t *aspath)
   return PYSTR_FROMSTR(buf);
 }
 
-static PyObject *get_communities_pylist(bgpstream_community_set_t *communities)
+static PyObject *get_communities_pyset(bgpstream_community_set_t *communities)
 {
-  PyObject *list;
+  PyObject *set;
   bgpstream_community_t *c;
-  Py_ssize_t len = bgpstream_community_set_size(communities);
+  int cnt = bgpstream_community_set_size(communities);
   int i;
+  char comm_buf[128];
   /* create the dictionary */
-  if ((list = PyList_New(len)) == NULL)
+  if ((set = PySet_New(NULL)) == NULL)
     return NULL;
 
-  PyObject *dict;
-
-  for (i = 0; i < len; i++) {
+  for (i = 0; i < cnt; i++) {
     c = bgpstream_community_set_get(communities, i);
 
-    /* create the dictionary */
-    if ((dict = PyDict_New()) == NULL)
-      return NULL;
-    /* add pair to dictionary */
-    if (add_to_dict(dict, "asn", Py_BuildValue("k", c->asn)) ||
-        add_to_dict(dict, "value", Py_BuildValue("k", c->value))) {
+    if (bgpstream_community_snprintf(comm_buf, sizeof(comm_buf), c) >=
+        sizeof(comm_buf)) {
       return NULL;
     }
 
-    /* add dictionary to list*/
-    PyList_SetItem(list, (Py_ssize_t)i, dict);
+    /* add community to set */
+    PySet_Add(set, PYSTR_FROMSTR(comm_buf));
   }
-  return list;
+  return set;
 }
 
 static PyObject *get_peerstate_pystr(bgpstream_elem_peerstate_t state)
@@ -141,7 +136,7 @@ static PyObject *BGPElem_get_fields(BGPElemObject *self, void *closure)
           get_ip_pystr((bgpstream_ip_addr_t *)&self->elem->nexthop)) ||
         add_to_dict(dict, "as-path", get_aspath_pystr(self->elem->as_path)) ||
         add_to_dict(dict, "communities",
-                    get_communities_pylist(self->elem->communities))) {
+                    get_communities_pyset(self->elem->communities))) {
       return NULL;
     }
 

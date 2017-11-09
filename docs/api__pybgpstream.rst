@@ -337,9 +337,8 @@ BGPElem
             - 'next-hop': The next-hop IP address (basestring)
             - 'as-path': The AS path (basestring)
             - 'prefix': The prefix (basestring)
-            - 'communities': The communities (a list of dictionaries,
-              each one representing a community; each dictionary has
-              the `asn` and the `value` keys)
+            - 'communities': The communities (a set of strings in the canonical
+            "asn:value" format)
 	 - *withdrawal*
             - 'prefix': The prefix (basestring)
 	 - *peerstate*

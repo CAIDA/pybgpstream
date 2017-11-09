@@ -130,7 +130,7 @@ class BGPElem:
             self._maybe_field("prefix"),
             self._maybe_field("next-hop"),
             self._maybe_field("as-path"),
-            self._maybe_field("communities"),
+            " ".join(self.fields["communities"]) if "communities" in self.fields else None,
             self._maybe_field("old-state"),
             self._maybe_field("new-state")
         )
