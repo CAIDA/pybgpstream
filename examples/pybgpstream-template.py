@@ -46,9 +46,8 @@ stream = pybgpstream.BGPStream(
 # read elems
 for rec, elem in stream:
     # do something with rec and elem
-    print "Received %s at time %d from collector %s" % (elem.type, rec.time, rec.collector)
-    if elem.type in ["A", "W"]:
-        print "  Peer ASN: %s, Pfx: %s" % (elem.peer_asn, elem.fields["prefix"])
+    print rec
+    print elem
 
 # alternatively, records and elems can be read in nested loops:
 for rec in stream.records():

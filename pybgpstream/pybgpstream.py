@@ -68,10 +68,7 @@ class BGPStream:
                 yield (_rec, _elem)
 
     def __getattr__(self, attr):
-        try:
-            return getattr(self.stream, attr)
-        except AttributeError:
-            return object.__getattr__(self, attr)
+        return getattr(self.stream, attr)
 
     def records(self):
         while True:
@@ -109,10 +106,12 @@ class BGPRecord:
             yield BGPElem(_elem)
 
     def __getattr__(self, attr):
-        try:
-            return getattr(self.rec, attr)
-        except AttributeError:
-            return object.__getattr__(self, attr)
+        return getattr(self.rec, attr)
+
+    def __str__(self):
+        return "%s|%s|%f|%s|%s|%s|%s|%s|%d" % (self.type, self.dump_position, self.time,
+                                               self.project, self.collector, self.router, self.router_ip,
+                                               self.status, self.dump_time)
 
 
 class BGPElem:
@@ -121,7 +120,20 @@ class BGPElem:
         self.elem = elem
 
     def __getattr__(self, attr):
-        try:
-            return getattr(self.elem, attr)
-        except AttributeError:
-            return object.__getattr__(self, attr)
+        return getattr(self.elem, attr)
+
+    def __str__(self):
+        return "%s|%s|%s|%s|%s|%s|%s|%s|%s" % (
+            self.type,
+            self.peer_asn,
+            self.peer_address,
+            self._maybe_field("prefix"),
+            self._maybe_field("next-hop"),
+            self._maybe_field("as-path"),
+            self._maybe_field("communities"),
+            self._maybe_field("old-state"),
+            self._maybe_field("new-state")
+        )
+
+    def _maybe_field(self, field):
+        return self.fields[field] if field in self.fields else None
