@@ -3,6 +3,9 @@
 *.#*
 .DS_Store
 
+# IDE crap
+.idea/
+
 # Compiled Object files
 *.slo
 *.lo

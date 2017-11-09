@@ -1,4 +1,4 @@
-from setuptools import setup, Extension
+from setuptools import setup, Extension, find_packages
 
 _pybgpstream_module = Extension("_pybgpstream",
                                 libraries = ["bgpstream"],
@@ -26,4 +26,6 @@ setup(name = "pybgpstream",
           'Operating System :: POSIX',
           ],
       keywords='_pybgpstream pybgpstream bgpstream bgp mrt routeviews route-views ris routing',
-      ext_modules = [_pybgpstream_module,])
+      packages=find_packages(),
+      install_requires=['python-dateutil'],
+      ext_modules=[_pybgpstream_module, ])
