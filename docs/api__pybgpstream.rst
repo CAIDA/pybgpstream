@@ -39,7 +39,18 @@ BGPStream
       :raises TypeError: if the filter string is not a basestring
       :raises ValueError: if the filter string is invalid or badly formed
 
+   .. py:method:: parse_filter_string(filter)
+
+      Add filters by parsing the given filter string.
+
+      TODO: finish documentation
+
+      :param str filter: filter string
+      :raises ValueError: if the filter cannot be parsed
+
    .. py:method:: add_filter(type, value)
+
+      NOTE: This method is deprecated in favor of `parse_filter_string`.
 
       Add a filter to an unstarted BGP Stream instance. Only those records/elems that
       match the filter(s) will be included in the stream.
