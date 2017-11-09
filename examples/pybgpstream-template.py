@@ -44,9 +44,11 @@ stream = pybgpstream.BGPStream(
 # stream.add_filter("prefix-more", "210.180.0.0/16")
 
 # read elems
-for rec, elem in stream:
-    # do something with rec and elem
-    print rec
+for elem in stream:
+    # record fields can be accessed directly from elem
+    # e.g. elem.time
+    # or via elem.record
+    # e.g. elem.record.time
     print elem
 
 # alternatively, records and elems can be read in nested loops:

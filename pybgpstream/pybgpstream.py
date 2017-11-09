@@ -65,7 +65,7 @@ class BGPStream:
     def __iter__(self):
         for _rec in self.records():
             for _elem in _rec:
-                yield (_rec, _elem)
+                yield _elem
 
     def __getattr__(self, attr):
         return getattr(self.stream, attr)
@@ -103,7 +103,7 @@ class BGPRecord:
             _elem = self.rec.get_next_elem()
             if _elem is None:
                 return
-            yield BGPElem(_elem)
+            yield BGPElem(self, _elem)
 
     def __getattr__(self, attr):
         return getattr(self.rec, attr)
@@ -116,15 +116,27 @@ class BGPRecord:
 
 class BGPElem:
 
-    def __init__(self, elem):
-        self.elem = elem
+    def __init__(self, rec, elem):
+        self.record = rec
+        self._elem = elem
 
     def __getattr__(self, attr):
-        return getattr(self.elem, attr)
+        try:
+            return getattr(self._elem, attr)
+        except AttributeError:
+            if attr == "record_type":
+                attr = "type"
+            return getattr(self.record, attr)
 
     def __str__(self):
-        return "%s|%s|%s|%s|%s|%s|%s|%s|%s" % (
+        return "%s|%s|%f|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s" % (
+            self.record_type,
             self.type,
+            self.time,
+            self.project,
+            self.collector,
+            self.router,
+            self.router_ip,
             self.peer_asn,
             self.peer_address,
             self._maybe_field("prefix"),
