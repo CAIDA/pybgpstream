@@ -29,6 +29,7 @@ class BGPStream:
     def __init__(self,
                  from_time=None,
                  until_time=None,
+                 data_interface=None,
                  project=None,
                  projects=None,
                  collector=None,
@@ -48,6 +49,9 @@ class BGPStream:
         if from_epoch or until_epoch:
             print "%s,%s" % (from_epoch, until_epoch)
             self.stream.add_interval_filter(from_epoch, until_epoch)
+
+        if data_interface is not None:
+            self.stream.set_data_interface(data_interface)
 
         self._maybe_add_filter("project", project, projects)
         self._maybe_add_filter("collector", collector, collectors)
