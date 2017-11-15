@@ -59,7 +59,7 @@ class BGPStream:
         if filter is not None:
             self.stream.parse_filter_string(filter)
 
-        self.stream.start()
+        self.started = False
 
     def __iter__(self):
         for _rec in self.records():
@@ -70,6 +70,9 @@ class BGPStream:
         return getattr(self.stream, attr)
 
     def records(self):
+        if not self.started:
+            self.stream.start()
+            self.started = True
         while True:
             _rec = self.stream.get_next_record()
             if _rec is None:
