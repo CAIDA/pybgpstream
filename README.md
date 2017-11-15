@@ -5,12 +5,10 @@ PyBGPStream is a Python library that provides a high-level interface for live
 and historical BGP data analysis. See http://bgpstream.caida.org for more
 information about BGPStream.
 
-PyBGPStream currently provides one Python module, `_pybgpstream`, a low-level
-(almost) direct interface to the [libBGPStream](http://bgpstream.caida.org) C
-API.
-
-There are plans to add another module, `pybgpstream`, a high-level 'Pythonic'
-interface to the functionality provided by `_pybgpstream`.
+PyBGPStream provides two Python modules, `_pybgpstream`, a low-level (almost)
+direct interface to the [libBGPStream](http://bgpstream.caida.org) C API, and
+`pybgpstream`, a high-level 'Pythonic' interface to the functionality provided
+by `_pybgpstream`.
 
 Quick Start
 -----------
