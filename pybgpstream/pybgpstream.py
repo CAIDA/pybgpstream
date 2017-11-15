@@ -47,7 +47,6 @@ class BGPStream:
         from_epoch = self._datestr_to_epoch(from_time)
         until_epoch = self._datestr_to_epoch(until_time)
         if from_epoch or until_epoch:
-            print "%s,%s" % (from_epoch, until_epoch)
             self.stream.add_interval_filter(from_epoch, until_epoch)
 
         if data_interface is not None:
