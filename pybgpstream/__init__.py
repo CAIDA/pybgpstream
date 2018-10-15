@@ -24,4 +24,4 @@
 # POSSIBILITY OF SUCH DAMAGE.
 #
 
-from pybgpstream import *
+from .pybgpstream import *
