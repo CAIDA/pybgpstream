@@ -82,7 +82,9 @@ static PyObject *get_communities_pyset(bgpstream_community_set_t *communities)
     }
 
     /* add community to set */
-    PySet_Add(set, PYSTR_FROMSTR(comm_buf));
+    PyObject *pystr = PYSTR_FROMSTR(comm_buf);
+    PySet_Add(set, pystr); // does NOT steal reference
+    Py_DECREF(pystr);
   }
   return set;
 }
