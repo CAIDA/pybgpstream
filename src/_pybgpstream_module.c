@@ -72,7 +72,7 @@ static PyObject *moduleinit(void)
 #if PY_MAJOR_VERSION > 2
   m = PyModule_Create(&module_def);
 #else
-  m = Py_InitModule3("_pybgpstream", module_methods, MODULE_DOCSTRING);
+  m = Py_InitModule3("_pybgpstream_v2", module_methods, MODULE_DOCSTRING);
 #endif
 
   if (m == NULL)
@@ -96,7 +96,7 @@ PyMODINIT_FUNC PyInit__pybgpstream(void)
   return moduleinit();
 }
 #else
-PyMODINIT_FUNC init_pybgpstream(void)
+PyMODINIT_FUNC init_pybgpstream_v2(void)
 {
   moduleinit();
 }

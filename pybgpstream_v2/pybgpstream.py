@@ -26,7 +26,7 @@
 
 import datetime
 import dateutil.parser
-import _pybgpstream
+import _pybgpstream_v2
 
 
 class BGPStream:
