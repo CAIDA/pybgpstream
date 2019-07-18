@@ -48,11 +48,11 @@ stream.start()
 # print the stream
 rec = stream.get_next_record()
 while(rec):
-    print rec.status, rec.project +"."+ rec.collector, rec.time
+    print(rec.status, rec.project +"."+ rec.collector, rec.time)
     elem = rec.get_next_elem()
     while(elem):
-        print "\t", elem.type, elem.peer_address, elem.peer_asn, \
-            elem.type, elem.fields
+        print("\t", elem.type, elem.peer_address, elem.peer_asn, \
+            elem.type, elem.fields)
         elem = rec.get_next_elem()
     rec = stream.get_next_record()
 

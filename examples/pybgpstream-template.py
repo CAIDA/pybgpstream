@@ -53,12 +53,12 @@ for elem in stream:
     # e.g. elem.time
     # or via elem.record
     # e.g. elem.record.time
-    print elem
+    print(elem)
 
 # alternatively, records and elems can be read in nested loops:
 for rec in stream.records():
     # do something with rec (e.g., choose to continue based on timestamp)
-    print "Received %s record at time %d from collector %s" % (rec.type, rec.time, rec.collector)
+    print("Received %s record at time %d from collector %s" % (rec.type, rec.time, rec.collector))
     for elem in rec:
         # do something with rec and/or elem
-        print "  Elem Type: %s" % elem.type
+        print("  Elem Type: %s" % elem.type)
