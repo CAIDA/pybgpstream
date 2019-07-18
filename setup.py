@@ -28,7 +28,8 @@ from setuptools import setup, Extension, find_packages
 
 _pybgpstream_module = Extension("_pybgpstream",
                                 libraries = ["bgpstream"],
-                                sources = ["src/_pybgpstream_module.c",
+                                sources = ["src/_pybgpstream_version.c",
+                                           "src/_pybgpstream_module.c",
                                            "src/_pybgpstream_bgpstream.c",
                                            "src/_pybgpstream_bgprecord.c",
                                            "src/_pybgpstream_bgpelem.c"])
