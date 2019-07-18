@@ -37,7 +37,7 @@ import math
 from pyspark import SparkConf, SparkContext
 from _pybgpstream import BGPStream, BGPRecord
 import sys
-import urllib2
+import urllib.request, urllib.error, urllib.parse
 
 # Output one data point per day
 RESULT_GRANULARITY = 3600*24
@@ -56,7 +56,7 @@ PROJECTS = ('routeviews', 'ris')
 
 # Query the BGPStream broker and identify the collectors that are available
 def get_collectors():
-    response = urllib2.urlopen(COLLECTORS_URL)
+    response = urllib.request.urlopen(COLLECTORS_URL)
     data = json.load(response)
     results = []
     for coll in data['data']['collectors']:

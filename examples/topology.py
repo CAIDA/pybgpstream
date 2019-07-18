@@ -62,5 +62,5 @@ while(stream.get_next_record(rec)):
          elem = rec.get_next_elem()
 
 # Output results
-print "Processed", rib_entries, "rib entries"
-print "Found", len(as_topology), "AS adjacencies"
+print("Processed", rib_entries, "rib entries")
+print("Found", len(as_topology), "AS adjacencies")
