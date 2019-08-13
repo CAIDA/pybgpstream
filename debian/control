@@ -2,7 +2,9 @@ Source: pybgpstream
 Maintainer: Alistair King <bgpstream-info@caida.org>
 Section: python
 Priority: optional
-Build-Depends: dh-python, python-setuptools (>= 0.6b3), python3-setuptools, python-all-dev (>= 2.6.6-3), python3-all-dev, debhelper (>= 9), libbgpstream2-dev
+Build-Depends: dh-python, debhelper (>= 9),
+  python-setuptools, python3-setuptools, python-all-dev, python3-all-dev, python-dateutil, python3-dateutil,
+  libbgpstream2-dev
 Standards-Version: 3.9.6
 Homepage: http://bgpstream.caida.org
 
