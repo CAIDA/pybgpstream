@@ -1,0 +1,5 @@
+pybgpstream (2.0.0-1) unstable; urgency=low
+
+  * First release of PyBGPStream 2.0.0
+
+ -- Alistair King <bgpstream-info@caida.org>  Tue, 13 Aug 2019 13:42:49 -0700
