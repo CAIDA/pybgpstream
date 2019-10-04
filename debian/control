@@ -1,22 +1,24 @@
 Source: pybgpstream
-Maintainer: Alistair King <bgpstream-info@caida.org>
+Maintainer: CAIDA Software Maintainer <software@caida.org>
 Section: python
 Priority: optional
 Build-Depends: dh-python, debhelper (>= 9),
-  python-setuptools, python3-setuptools, python-all-dev, python3-all-dev, python-dateutil, python3-dateutil,
-  libbgpstream2-dev
+  python-setuptools, python3-setuptools, python-all-dev, python3-all-dev,
+  python-dateutil, python3-dateutil, libbgpstream2-dev
 Standards-Version: 3.9.6
-Homepage: http://bgpstream.caida.org
+Homepage: https://bgpstream.caida.org
 
 Package: python-pybgpstream
 Architecture: any
 Depends: ${misc:Depends}, ${python:Depends}, ${shlibs:Depends}
-Description: A Python interface to BGPStream
- Provides a high-level interface for live and historical BGP data analysis. PyBGPStream requires the libBGPStream C library, available at http://bgpstream.caida.org/download.
+Description: Python interface to BGPStream
+ Provides a high-level interface for live and historical BGP data
+ analysis.
 
 Package: python3-pybgpstream
 Architecture: any
 Depends: ${misc:Depends}, ${python3:Depends}, ${shlibs:Depends}
-Description: A Python interface to BGPStream
- Provides a high-level interface for live and historical BGP data analysis. PyBGPStream requires the libBGPStream C library, available at http://bgpstream.caida.org/download.
+Description: Python3 interface to BGPStream
+ Provides a high-level interface for live and historical BGP data
+ analysis.
 
