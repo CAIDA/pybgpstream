@@ -7,3 +7,6 @@ Contents:
    :maxdepth: 1
 
    api__pybgpstream
+   api_pybgpstream
+
+.. automodule:: pybgpstream
