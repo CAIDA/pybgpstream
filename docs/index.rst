@@ -8,5 +8,3 @@ Contents:
 
    api__pybgpstream
    api_pybgpstream
-
-.. automodule:: pybgpstream
