@@ -1,3 +1,9 @@
+pybgpstream (2.0.1) unstable; urgency=medium
+
+  * patch: allow user to specify no interval and use live-stream mode
+
+ -- Alistair King <software@caida.org>  Fri, 22 Nov 2019 10:04:31 -0800
+
 pybgpstream (2.0.0~rc1-1) unstable; urgency=medium
 
   * Various minor fixes to debian packaging
