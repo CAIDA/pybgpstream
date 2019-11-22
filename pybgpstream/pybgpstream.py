@@ -25,6 +25,8 @@
 #
 
 import datetime
+import time
+
 import dateutil.parser
 import _pybgpstream
 
@@ -49,7 +51,10 @@ class BGPStream:
         # pass along any config options the user asked for
 
         # time interval (accepts string date/times)
-        from_epoch = self._datestr_to_epoch(from_time)
+        if from_time is not None:
+            from_epoch = self._datestr_to_epoch(from_time)
+        else:
+            from_epoch = int(time.time())
         until_epoch = self._datestr_to_epoch(until_time)
         if from_epoch or until_epoch:
             self.stream.add_interval_filter(from_epoch, until_epoch)
