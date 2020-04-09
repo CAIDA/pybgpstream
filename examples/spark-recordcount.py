@@ -78,12 +78,12 @@ def run_bgpstream(args):
     (collector, start_time, end_time, data_type) = args
 
     # initialize and configure BGPStream
-    stream = pybgpstream.BGPStream()
-    stream.add_filter('collector', collector)
-    # NB: BGPStream uses inclusive/inclusive intervals, so subtract one off the
-    # end time since we are using inclusive/exclusive intervals
-    stream.add_interval_filter(start_time, end_time-1)
-    stream.add_filter('record-type', data_type)
+    stream = pybgpstream.BGPStream(
+        collector=collector,
+        from_time=start_time,
+        until_time=end_time-1,
+        record_type=data_type
+        )
 
     # per-peer data
     peers_data = {}

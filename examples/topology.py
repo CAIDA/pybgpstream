@@ -28,13 +28,14 @@
 import pybgpstream
 
 # create a new bgpstream instance
-stream = pybgpstream.BGPStream()
-
-# configure the stream to retrieve RIB records from the RRC06 collector at
-# 2015/05/01 00:00 UTC
-stream.add_filter('collector', 'rrc06')
-stream.add_filter('record-type', 'ribs')
-stream.add_interval_filter(1427846400, 1427846700)
+# configure the stream to retrieve RIB records from the RRC06 collector
+# from 2015-04-01 00:00:00 GMT to 2015-04-01 00:05:00 GMT
+stream = pybgpstream.BGPStream(
+     collector="rrc06",
+     record_type="ribs",
+     from_time=1427846400,
+     until_time=1427846700,
+     )
 
 as_topology = set()
 rib_entries = 0

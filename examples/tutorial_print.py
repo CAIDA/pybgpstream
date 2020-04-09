@@ -27,20 +27,24 @@
 
 import pybgpstream
 
-# create a new bgpstream instance
-stream = pybgpstream.BGPStream()
-
 # configure the stream to retrieve Updates records from the RRC06 collector
 # The commented out add_filter lines are the old way, the parse_filter_string
 # way is the new method for applying filters
 
-#stream.add_filter('collector', 'rrc06')
-#stream.add_filter('record-type', 'updates')
-stream.parse_filter_string('collector rrc06 and type updates')
-
-# select the time interval to process:
 # Wed Apr 1 00:02:50 UTC 2015 -> Wed Apr 1 00:04:30
-stream.add_interval_filter(1427846570, 1427846670)
+stream = pybgpstream.BGPStream(
+    filter='collector rrc06 and type updates',
+    from_time=1427846570,
+    until_time=1427846670,
+    )
+
+# equivalent version:
+# stream = pybgpstream.BGPStream(
+#      collector="rrc06",
+#      record_type="updates",
+#      from_time=1427846570,
+#      until_time=1427846670,
+#      )
 
 # print the stream
 for rec in stream.records():
