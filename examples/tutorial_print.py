@@ -25,34 +25,30 @@
 # POSSIBILITY OF SUCH DAMAGE.
 #
 
-import _pybgpstream_caida as _pybgpstream
-
-# create a new bgpstream instance
-stream = _pybgpstream.BGPStream()
+import pybgpstream
 
 # configure the stream to retrieve Updates records from the RRC06 collector
 # The commented out add_filter lines are the old way, the parse_filter_string
 # way is the new method for applying filters
 
-#stream.add_filter('collector', 'rrc06')
-#stream.add_filter('record-type', 'updates')
-stream.parse_filter_string('collector rrc06 and type updates')
-
-# select the time interval to process:
 # Wed Apr 1 00:02:50 UTC 2015 -> Wed Apr 1 00:04:30
-stream.add_interval_filter(1427846570, 1427846670)
+stream = pybgpstream.BGPStream(
+    filter='collector rrc06 and type updates',
+    from_time="2015-04-01 00:02:50",
+    until_time="2015-04-01 00:04:30",
+    )
 
-# start the stream
-stream.start()
+# equivalent version:
+# stream = pybgpstream.BGPStream(
+#      collector="rrc06",
+#      record_type="updates",
+#      from_time="2015-04-01 00:02:50",
+#      until_time="2015-04-01 00:04:30",
+#      )
 
 # print the stream
-rec = stream.get_next_record()
-while(rec):
+for rec in stream.records():
     print(rec.status, rec.project +"."+ rec.collector, rec.time)
-    elem = rec.get_next_elem()
-    while(elem):
+    for elem in rec:
         print("\t", elem.type, elem.peer_address, elem.peer_asn, \
             elem.type, elem.fields)
-        elem = rec.get_next_elem()
-    rec = stream.get_next_record()
-

@@ -35,7 +35,7 @@ from datetime import datetime
 import json
 import math
 from pyspark import SparkConf, SparkContext
-from _pybgpstream import BGPStream, BGPRecord
+import pybgpstream
 import sys
 try:
     import urllib.request as urllib_request
@@ -78,25 +78,22 @@ def run_bgpstream(args):
     (collector, start_time, end_time, data_type) = args
 
     # initialize and configure BGPStream
-    stream = BGPStream()
-    rec = BGPRecord()
-    stream.add_filter('collector', collector)
-    # NB: BGPStream uses inclusive/inclusive intervals, so subtract one off the
-    # end time since we are using inclusive/exclusive intervals
-    stream.add_interval_filter(start_time, end_time-1)
-    stream.add_filter('record-type', data_type)
-    stream.start()
+    stream = pybgpstream.BGPStream(
+        collector=collector,
+        from_time=start_time,
+        until_time=end_time-1,
+        record_type=data_type
+        )
 
     # per-peer data
     peers_data = {}
 
     # loop over all records in the stream
-    while stream.get_next_record(rec):
-        elem = rec.get_next_elem()
+    for rec in stream.records():
         # to track the peers that have elems in this record
         peer_signatures = set()
         # loop over all elems in the record
-        while elem:
+        for elem in rec:
             # create a peer signature for this elem
             sig = peer_signature(rec, elem)
             peer_signatures.add(sig)
@@ -105,7 +102,6 @@ def run_bgpstream(args):
             if sig not in peers_data:
                 peers_data[sig] = [0, 0, 0]
             peers_data[sig][0] += 1  # increment elem cnt for this peer
-            elem = rec.get_next_elem()
 
         # done with elems, increment the 'coll_record_cnt' field for just
         # one peer that was present in this record (allows a true, per-collector
