@@ -35,7 +35,7 @@ from datetime import datetime
 import json
 import math
 from pyspark import SparkConf, SparkContext
-from _pybgpstream import BGPStream, BGPRecord
+import pybgpstream
 import sys
 try:
     import urllib.request as urllib_request
@@ -78,8 +78,7 @@ def run_bgpstream(args):
     (collector, start_time, end_time, data_type) = args
 
     # initialize and configure BGPStream
-    stream = BGPStream()
-    rec = BGPRecord()
+    stream = pybgpstream.BGPStream()
     stream.add_filter('collector', collector)
     # NB: BGPStream uses inclusive/inclusive intervals, so subtract one off the
     # end time since we are using inclusive/exclusive intervals
@@ -91,7 +90,8 @@ def run_bgpstream(args):
     peers_data = {}
 
     # loop over all records in the stream
-    while stream.get_next_record(rec):
+    rec = stream.get_next_record()
+    while rec:
         elem = rec.get_next_elem()
         # to track the peers that have elems in this record
         peer_signatures = set()
@@ -117,6 +117,8 @@ def run_bgpstream(args):
                     peers_data[sig][2] += 1  # increment the coll_record_cnt
                     first = False
                 peers_data[sig][1] += 1
+
+        rec = stream.get_next_record()
 
     # the time in the output row is truncated down to a multiple of
     # RESULT_GRANULARITY so that slices can be merged correctly
