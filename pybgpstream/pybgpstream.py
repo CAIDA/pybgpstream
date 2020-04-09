@@ -101,6 +101,11 @@ class BGPStream:
     def _datestr_to_epoch(datestr):
         if datestr is None:
             return 0
+        if isinstance(datestr, int):
+            return datestr
+        assert(isinstance(datestr, str))
+        if datestr.isdigit():
+            return int(datestr)
         dt = dateutil.parser.parse(datestr, ignoretz=True)
         return int((dt - datetime.datetime(1970, 1, 1)).total_seconds())
 
