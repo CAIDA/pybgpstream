@@ -33,8 +33,8 @@ import pybgpstream
 stream = pybgpstream.BGPStream(
      collector="rrc06",
      record_type="ribs",
-     from_time=1427846400,
-     until_time=1427846700,
+     from_time="2015-04-01 00:00:00",
+     until_time="2015-04-01 00:05:00",
      )
 
 as_topology = set()

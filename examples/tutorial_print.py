@@ -34,16 +34,16 @@ import pybgpstream
 # Wed Apr 1 00:02:50 UTC 2015 -> Wed Apr 1 00:04:30
 stream = pybgpstream.BGPStream(
     filter='collector rrc06 and type updates',
-    from_time=1427846570,
-    until_time=1427846670,
+    from_time="2015-04-01 00:02:50",
+    until_time="2015-04-01 00:04:30",
     )
 
 # equivalent version:
 # stream = pybgpstream.BGPStream(
 #      collector="rrc06",
 #      record_type="updates",
-#      from_time=1427846570,
-#      until_time=1427846670,
+#      from_time="2015-04-01 00:02:50",
+#      until_time="2015-04-01 00:04:30",
 #      )
 
 # print the stream
