@@ -36,29 +36,20 @@ stream.add_filter('collector', 'rrc06')
 stream.add_filter('record-type', 'ribs')
 stream.add_interval_filter(1427846400, 1427846700)
 
-# start the stream
-stream.start()
-
 as_topology = set()
 rib_entries = 0
 
 # Process data
-rec = stream.get_next_record()
-while rec:
-     elem = rec.get_next_elem()
-     while elem:
-         rib_entries += 1
-         # get the AS path
-         path = elem.fields['as-path']
-         # get the list of ASes in the path
-         ases = path.split(" ")
-         for i in range(0,len(ases)-1):
-             # avoid multiple prepended ASes
-             if(ases[i] != ases[i+1]):
-                 as_topology.add(tuple(sorted([ases[i],ases[i+1]])))
-         # get next elem
-         elem = rec.get_next_elem()
-     rec = stream.get_next_record()
+for elem in stream:
+    rib_entries += 1
+    # get the AS path
+    path = elem.fields['as-path']
+    # get the list of ASes in the path
+    ases = path.split(" ")
+    for i in range(0, len(ases)-1):
+        # avoid multiple prepended ASes
+        if ases[i] != ases[i+1]:
+            as_topology.add(tuple(sorted([ases[i],ases[i+1]])))
 
 # Output results
 print("Processed", rib_entries, "rib entries")

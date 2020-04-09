@@ -84,19 +84,16 @@ def run_bgpstream(args):
     # end time since we are using inclusive/exclusive intervals
     stream.add_interval_filter(start_time, end_time-1)
     stream.add_filter('record-type', data_type)
-    stream.start()
 
     # per-peer data
     peers_data = {}
 
     # loop over all records in the stream
-    rec = stream.get_next_record()
-    while rec:
-        elem = rec.get_next_elem()
+    for rec in stream.records():
         # to track the peers that have elems in this record
         peer_signatures = set()
         # loop over all elems in the record
-        while elem:
+        for elem in rec:
             # create a peer signature for this elem
             sig = peer_signature(rec, elem)
             peer_signatures.add(sig)
@@ -105,7 +102,6 @@ def run_bgpstream(args):
             if sig not in peers_data:
                 peers_data[sig] = [0, 0, 0]
             peers_data[sig][0] += 1  # increment elem cnt for this peer
-            elem = rec.get_next_elem()
 
         # done with elems, increment the 'coll_record_cnt' field for just
         # one peer that was present in this record (allows a true, per-collector
@@ -117,8 +113,6 @@ def run_bgpstream(args):
                     peers_data[sig][2] += 1  # increment the coll_record_cnt
                     first = False
                 peers_data[sig][1] += 1
-
-        rec = stream.get_next_record()
 
     # the time in the output row is truncated down to a multiple of
     # RESULT_GRANULARITY so that slices can be merged correctly

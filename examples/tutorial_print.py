@@ -42,17 +42,9 @@ stream.parse_filter_string('collector rrc06 and type updates')
 # Wed Apr 1 00:02:50 UTC 2015 -> Wed Apr 1 00:04:30
 stream.add_interval_filter(1427846570, 1427846670)
 
-# start the stream
-stream.start()
-
 # print the stream
-rec = stream.get_next_record()
-while(rec):
+for rec in stream.records():
     print(rec.status, rec.project +"."+ rec.collector, rec.time)
-    elem = rec.get_next_elem()
-    while(elem):
+    for elem in rec:
         print("\t", elem.type, elem.peer_address, elem.peer_asn, \
             elem.type, elem.fields)
-        elem = rec.get_next_elem()
-    rec = stream.get_next_record()
-
