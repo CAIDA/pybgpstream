@@ -25,10 +25,10 @@
 # POSSIBILITY OF SUCH DAMAGE.
 #
 
-import _pybgpstream_caida as _pybgpstream
+import pybgpstream
 
 # create a new bgpstream instance
-stream = _pybgpstream.BGPStream()
+stream = pybgpstream.BGPStream()
 
 # configure the stream to retrieve Updates records from the RRC06 collector
 # The commented out add_filter lines are the old way, the parse_filter_string
