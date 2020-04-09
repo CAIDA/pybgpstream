@@ -25,13 +25,10 @@
 # POSSIBILITY OF SUCH DAMAGE.
 #
 
-from _pybgpstream import BGPStream, BGPRecord, BGPElem
+import pybgpstream
 
 # create a new bgpstream instance
-stream = BGPStream()
-
-# create a reusable bgprecord instance
-rec = BGPRecord()
+stream = pybgpstream.BGPStream()
 
 # configure the stream to retrieve RIB records from the RRC06 collector at
 # 2015/05/01 00:00 UTC
@@ -46,9 +43,10 @@ as_topology = set()
 rib_entries = 0
 
 # Process data
-while(stream.get_next_record(rec)):
+rec = stream.get_next_record()
+while rec:
      elem = rec.get_next_elem()
-     while(elem):
+     while elem:
          rib_entries += 1
          # get the AS path
          path = elem.fields['as-path']
@@ -60,6 +58,7 @@ while(stream.get_next_record(rec)):
                  as_topology.add(tuple(sorted([ases[i],ases[i+1]])))
          # get next elem
          elem = rec.get_next_elem()
+     rec = stream.get_next_record()
 
 # Output results
 print("Processed", rib_entries, "rib entries")
