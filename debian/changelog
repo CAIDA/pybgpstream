@@ -1,3 +1,9 @@
+pybgpstream (2.0.2) unstable; urgency=medium
+
+  * patch: only defaults to real-time if using broker data interface if no interval is provided
+
+ -- Alistair King <software@caida.org>  Fri, 29 May 2020 16:00:00 -0800
+
 pybgpstream (2.0.1) unstable; urgency=medium
 
   * patch: allow user to specify no interval and use live-stream mode
