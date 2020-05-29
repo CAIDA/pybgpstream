@@ -50,11 +50,11 @@ class BGPStream:
 
         # pass along any config options the user asked for
 
-        # time interval (accepts string date/times)
-        if from_time is not None:
-            from_epoch = self._datestr_to_epoch(from_time)
-        else:
-            from_epoch = int(time.time())
+        # time interval (accepts date/times (str) or unix-time (int))
+        if from_time is None and data_interface in [None, "broker"]:
+            # no from_time is provided, and data_interface is broker, we set the from_time to now
+            from_time = int(time.time())
+        from_epoch = self._datestr_to_epoch(from_time)
         until_epoch = self._datestr_to_epoch(until_time)
         if from_epoch or until_epoch:
             self.stream.add_interval_filter(from_epoch, until_epoch)
@@ -103,7 +103,7 @@ class BGPStream:
             return 0
         if isinstance(datestr, int):
             return datestr
-        assert(isinstance(datestr, str))
+        assert (isinstance(datestr, str))
         if datestr.isdigit():
             return int(datestr)
         dt = dateutil.parser.parse(datestr, ignoretz=True)
