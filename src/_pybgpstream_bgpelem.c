@@ -118,6 +118,13 @@ static PyObject *BGPElem_get_type(BGPElemObject *self, void *closure)
   return PYSTR_FROMSTR(buf);
 }
 
+/* originated time (sec.usec) */
+static PyObject *BGPElem_get_orig_time(BGPElemObject *self, void *closure)
+{
+  return Py_BuildValue("d", self->elem->orig_time_sec +
+                                (self->elem->orig_time_usec / 1000000.0));
+}
+
 /* peer address */
 /** @todo consider using something like netaddr
     (http://pythonhosted.org/netaddr/) */
@@ -193,6 +200,15 @@ static PyGetSetDef BGPElem_getsetters[] = {
 
   /* type */
   {"type", (getter)BGPElem_get_type, NULL, "Type", NULL},
+
+  /* Originated Time
+   *
+   * See https://github.com/CAIDA/libbgpstream/blob/b1b877e709e22fe4800eeff135154f045cae8ea7/lib/bgpstream_elem.h#L169
+   *
+   * This is NOT the same as the record time. Be sure this is the
+   * field you want before you use it.
+   */
+  {"orig_time", (getter)BGPElem_get_orig_time, NULL, "Originated Time", NULL},
 
   /* Peer Address */
   {"peer_address", (getter)BGPElem_get_peer_address, NULL, "Peer IP Address",
