@@ -65,7 +65,7 @@ static PyObject *get_aspath_pystr(bgpstream_as_path_t *aspath)
 static PyObject *get_communities_pyset(bgpstream_community_set_t *communities)
 {
   PyObject *set;
-  bgpstream_community_t *c;
+  const bgpstream_community_t *c;
   int cnt = bgpstream_community_set_size(communities);
   int i;
   char comm_buf[128];
