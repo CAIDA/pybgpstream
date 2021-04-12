@@ -34,6 +34,7 @@ import pybgpstream
 # Wed Apr 1 00:02:50 UTC 2015 -> Wed Apr 1 00:04:30
 stream = pybgpstream.BGPStream(
     filter='collector rrc06 and type updates',
+    collectors=["route-views.sg", "route-views.eqix"],
     from_time="2015-04-01 00:02:50",
     until_time="2015-04-01 00:04:30",
     )
@@ -42,6 +43,7 @@ stream = pybgpstream.BGPStream(
 # stream = pybgpstream.BGPStream(
 #      collector="rrc06",
 #      record_type="updates",
+#      collectors=["route-views.sg", "route-views.eqix"],
 #      from_time="2015-04-01 00:02:50",
 #      until_time="2015-04-01 00:04:30",
 #      )
@@ -50,5 +52,4 @@ stream = pybgpstream.BGPStream(
 for rec in stream.records():
     print(rec.status, rec.project +"."+ rec.collector, rec.time)
     for elem in rec:
-        print("\t", elem.type, elem.peer_address, elem.peer_asn, \
-            elem.type, elem.fields)
+        print("\t", elem.type, elem.peer_address, elem.peer_asn, elem.fields)
