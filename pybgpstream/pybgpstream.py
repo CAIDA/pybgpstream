@@ -103,6 +103,8 @@ class BGPStream:
             return 0
         if isinstance(datestr, int):
             return datestr
+        if isinstance(datestr, float):
+            return int(datestr)
         assert (isinstance(datestr, str))
         if datestr.isdigit():
             return int(datestr)
