@@ -87,11 +87,11 @@ BGPStream
 
    .. py:attribute:: record_type
 
-      Specify type of the record type to process: `update`, or `rib`.
+      Specify type of the record type to process: `updates`, or `ribs`.
 
-   .. py:attribute:: recode_types
+   .. py:attribute:: record_types
 
-      Specify type of the record types to process: `update`, or `rib`.
+      Specify type of the record types to process: `updates`, or `ribs`.
 
    .. py:attribute:: filter
 
