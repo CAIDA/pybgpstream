@@ -33,7 +33,7 @@ import pybgpstream
 
 # Wed Apr 1 00:02:50 UTC 2015 -> Wed Apr 1 00:04:30
 stream = pybgpstream.BGPStream(
-    filter='collector rrc06 and type updates',
+    filter='type updates',
     collectors=["route-views.sg", "route-views.eqix"],
     from_time="2015-04-01 00:02:50",
     until_time="2015-04-01 00:04:30",
@@ -41,7 +41,6 @@ stream = pybgpstream.BGPStream(
 
 # equivalent version:
 # stream = pybgpstream.BGPStream(
-#      collector="rrc06",
 #      record_type="updates",
 #      collectors=["route-views.sg", "route-views.eqix"],
 #      from_time="2015-04-01 00:02:50",
