@@ -334,7 +334,12 @@ static PyObject *BGPStream_set_live_mode(BGPStreamObject *self)
  */
 static PyObject *BGPStream_start(BGPStreamObject *self)
 {
-  if (bgpstream_start(self->bs) < 0) {
+  int ret = -1;
+  Py_BEGIN_ALLOW_THREADS;
+  ret = bgpstream_start(self->bs);
+  Py_END_ALLOW_THREADS;
+
+  if (ret < 0) {
     PyErr_SetString(PyExc_RuntimeError, "Could not start stream");
     return NULL;
   }
@@ -348,7 +353,11 @@ static PyObject *BGPStream_get_next_record(BGPStreamObject *self)
   int ret;
   PyObject *pyrec;
 
+  // get_next_record can block for a very long time, so release the GIL
+  Py_BEGIN_ALLOW_THREADS;
   ret = bgpstream_get_next_record(self->bs, &rec);
+  Py_END_ALLOW_THREADS;
+
   if (ret < 0) {
     PyErr_SetString(PyExc_RuntimeError,
                     "Could not get next record (is the stream started?)");
