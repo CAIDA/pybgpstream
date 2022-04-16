@@ -90,15 +90,16 @@ static PyObject *BGPStream_add_filter(BGPStreamObject *self, PyObject *args)
 {
   /* args: FILTER_TYPE (string), FILTER_VALUE (string) */
   static char *filtertype_strs[] = {
-    "project",   "collector",    "record-type", "peer-asn",    "prefix",
-    "community", "prefix-exact", "prefix-more", "prefix-less", "prefix-any",
-    "aspath",    "ipversion",    "elemtype", "not-peer-asn",   NULL};
+    "project",   "collector", "record-type", "peer-asn", "not-peer-asn",
+    "prefix", "community", "prefix-exact", "prefix-more", "prefix-less",
+    "prefix-any", "aspath", "ipversion", "elemtype", NULL};
 
   static int filtertype_vals[] = {
     BGPSTREAM_FILTER_TYPE_PROJECT,
     BGPSTREAM_FILTER_TYPE_COLLECTOR,
     BGPSTREAM_FILTER_TYPE_RECORD_TYPE,
     BGPSTREAM_FILTER_TYPE_ELEM_PEER_ASN,
+    BGPSTREAM_FILTER_TYPE_ELEM_NOT_PEER_ASN,
     BGPSTREAM_FILTER_TYPE_ELEM_PREFIX,
     BGPSTREAM_FILTER_TYPE_ELEM_COMMUNITY,
     BGPSTREAM_FILTER_TYPE_ELEM_PREFIX_EXACT,
