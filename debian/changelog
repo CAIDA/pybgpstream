@@ -1,3 +1,12 @@
+pybgpstream (2.0.4) unstable; urgency=medium
+
+  * Expose elem's orig_time_* fields.
+  * Allow specifying floats as timestamps.
+  * Release GIL for calls to bgpstream_get_next_record.
+  * Add support for not-peer-asn filter.
+
+ -- Brendon Jones <software@caida.org>  Sat, 10 Feb 2024 12:23:41 +1300
+
 pybgpstream (2.0.2) unstable; urgency=medium
 
   * patch: only defaults to real-time if using broker data interface if no interval is provided
