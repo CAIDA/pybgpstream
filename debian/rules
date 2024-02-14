@@ -4,8 +4,9 @@
 # Tue, 13 Aug 2019 13:42:49 -0700
 export PYBUILD_NAME=pybgpstream
 export PYBUILD_DISABLE=test
+
 %:
-	dh $@ --with python2,python3 --buildsystem=pybuild
+	dh $@ --with python3 --buildsystem=pybuild
 
 override_dh_auto_install:
 	dh_auto_install
