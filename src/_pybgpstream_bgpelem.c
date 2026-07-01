@@ -169,6 +169,9 @@ static PyObject *BGPElem_get_fields(BGPElemObject *self, void *closure)
   /* FALLTHROUGH */
 
   case BGPSTREAM_ELEM_TYPE_WITHDRAWAL:
+#ifdef BGPSTREAM_ELEM_TYPE_END_OF_RIB
+  case BGPSTREAM_ELEM_TYPE_END_OF_RIB:
+#endif
     if (add_to_dict(dict, "prefix",
                     get_pfx_pystr((bgpstream_pfx_t *)&self->elem->prefix))) {
       return NULL;
@@ -180,13 +183,6 @@ static PyObject *BGPElem_get_fields(BGPElemObject *self, void *closure)
                     get_peerstate_pystr(self->elem->old_state)) ||
         add_to_dict(dict, "new-state",
                     get_peerstate_pystr(self->elem->new_state))) {
-      return NULL;
-    }
-    break;
-
-  case BGPSTREAM_ELEM_TYPE_END_OF_RIB:
-    if (add_to_dict(dict, "prefix",
-                    get_pfx_pystr((bgpstream_pfx_t *)&self->elem->prefix))) {
       return NULL;
     }
     break;
