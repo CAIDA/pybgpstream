@@ -169,7 +169,8 @@ static PyObject *BGPElem_get_fields(BGPElemObject *self, void *closure)
   /* FALLTHROUGH */
 
   case BGPSTREAM_ELEM_TYPE_WITHDRAWAL:
-#ifdef BGPSTREAM_ELEM_TYPE_END_OF_RIB
+#if BGPSTREAM_MAJOR_VERSION > 2 || \
+    (BGPSTREAM_MAJOR_VERSION == 2 && BGPSTREAM_MID_VERSION >= 4)
   case BGPSTREAM_ELEM_TYPE_END_OF_RIB:
 #endif
     if (add_to_dict(dict, "prefix",
