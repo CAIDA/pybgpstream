@@ -91,7 +91,7 @@ BGPStream
 
       The `elemtype` filter can be used to limit the stream to only certain
       element types. Possible element types are `ribs`, `withdrawals`,
-      `announcements` and `peerstates`.
+      `announcements`, `peerstates` and `endofrib`.
 
       The `community` filter is specified as
       a `asn:value` formatted string, the user can specify the ASn or

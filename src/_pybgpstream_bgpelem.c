@@ -184,6 +184,13 @@ static PyObject *BGPElem_get_fields(BGPElemObject *self, void *closure)
     }
     break;
 
+  case BGPSTREAM_ELEM_TYPE_END_OF_RIB:
+    if (add_to_dict(dict, "prefix",
+                    get_pfx_pystr((bgpstream_pfx_t *)&self->elem->prefix))) {
+      return NULL;
+    }
+    break;
+
   case BGPSTREAM_ELEM_TYPE_UNKNOWN:
   default:
     break;
